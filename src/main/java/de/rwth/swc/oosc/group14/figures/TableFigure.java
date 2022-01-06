@@ -19,19 +19,47 @@ import java.util.*;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
 
-public class TableFigure extends RectangleFigure{
+public class TableFigure extends GraphicalCompositeFigure {
     public TableFigure() {
-        this("Table");
+        super(new RectangleFigure());
+
+        setLayouter(new VerticalLayouter());
+
+        RectangleFigure nameCompartmentPF = new RectangleFigure();
+        nameCompartmentPF.set(STROKE_COLOR, null);
+        nameCompartmentPF.setAttributeEnabled(STROKE_COLOR, false);
+        nameCompartmentPF.set(FILL_COLOR, null);
+        nameCompartmentPF.setAttributeEnabled(FILL_COLOR, false);
+        ListFigure nameCompartment = new ListFigure(nameCompartmentPF);
+
+        add(nameCompartment);
+
+        Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
+        nameCompartment.set(LAYOUT_INSETS, insets);
+
+        TextFigure nameFigure;
+        nameCompartment.add(nameFigure = new TextFigure());
+        nameFigure.set(FONT_BOLD, true);
+        nameFigure.setAttributeEnabled(FONT_BOLD, false);
+
+        setAttributeEnabled(STROKE_DASHES, false);
+
+        ResourceBundleUtil labels =
+                AppLabels.getLabels();
+
+        setName("Table");
+
     }
 
+    public void setName(String newValue) {
+        getNameFigure().setText(newValue);
+    }
+
+    private TextFigure getNameFigure() {
+        return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
+    }
     public TableFigure(String text) {
         setText(text);
-    }
-
-    @Override
-    protected void drawText(Graphics2D g) {
-        super.drawText(g);
-        g.drawString("Table", 10, 20);
     }
 
     public void setText(String newText) {

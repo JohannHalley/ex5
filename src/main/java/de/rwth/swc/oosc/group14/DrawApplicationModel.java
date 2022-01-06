@@ -174,6 +174,9 @@ public class DrawApplicationModel extends DefaultApplicationModel {
         attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new TableFigure(), attributes), "edit.createTable", myLabels);
 
+        attributes = new HashMap<AttributeKey<?>, Object>();
+        attributes.put(AttributeKeys.CANVAS_WIDTH, 20);
+        attributes.put(AttributeKeys.CANVAS_HEIGHT, 20);
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new ChairFigure(), attributes), "edit.createChair", myLabels);
 
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new BedFigure(), attributes), "edit.createBed", myLabels);
