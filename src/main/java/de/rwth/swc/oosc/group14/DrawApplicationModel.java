@@ -3,29 +3,12 @@
  */
 package de.rwth.swc.oosc.group14;
 
-import de.rwth.swc.oosc.group14.figures.ImportSketchFigure;
-import de.rwth.swc.oosc.group14.figures.WallFigure;
-import de.rwth.swc.oosc.group14.figures.WindowFigure;
+import de.rwth.swc.oosc.group14.figures.*;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.ApplicationModel;
 import org.jhotdraw.app.DefaultApplicationModel;
 import org.jhotdraw.app.View;
-import org.jhotdraw.draw.AbstractAttributedFigure;
-import org.jhotdraw.draw.BezierFigure;
-import org.jhotdraw.draw.ConnectionFigure;
-import org.jhotdraw.draw.DefaultDrawingEditor;
-import org.jhotdraw.draw.DiamondFigure;
-import org.jhotdraw.draw.DrawLabels;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.EllipseFigure;
-import org.jhotdraw.draw.ImageFigure;
-import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.LineFigure;
-import org.jhotdraw.draw.RectangleFigure;
-import org.jhotdraw.draw.RoundRectangleFigure;
-import org.jhotdraw.draw.TextAreaFigure;
-import org.jhotdraw.draw.TextFigure;
-import org.jhotdraw.draw.TriangleFigure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.decoration.ArrowTip;
 import org.jhotdraw.draw.liner.CurvedLiner;
@@ -44,7 +27,9 @@ import org.jhotdraw.util.ResourceBundleUtil;
 import org.jhotdraw.annotation.Nullable;
 import javax.swing.Action;
 import javax.swing.JToolBar;
+import java.awt.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -140,7 +125,7 @@ public class DrawApplicationModel extends DefaultApplicationModel {
             Collection<Action> drawingActions, Collection<Action> selectionActions) {
         ResourceBundleUtil myLabels = AppLabels.getLabels();
         ResourceBundleUtil labels = DrawLabels.getLabels();
-
+        HashMap<AttributeKey<?>, Object> attributes;
         ButtonFactory.addSelectionToolTo(tb, editor, drawingActions, selectionActions);
         tb.addSeparator();
 
@@ -173,8 +158,29 @@ public class DrawApplicationModel extends DefaultApplicationModel {
         ButtonFactory.addToolTo(tb, editor, new ImageTool(new ImportSketchFigure()), "edit.importSketch", myLabels);
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new RectangleFigure()), "edit.createFloor", myLabels);
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new WallFigure()), "edit.createWall", myLabels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new WindowFigure()), "edit.createWindow", myLabels);
+
+        attributes = new HashMap<AttributeKey<?>, Object>();
+        attributes.put(AttributeKeys.FILL_COLOR, Color.white);
+//        attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
+//        attributes.put(AttributeKeys.TEXT, "Window");
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new WindowFigure(), attributes), "edit.createWindow", myLabels);
+
+        attributes = new HashMap<AttributeKey<?>, Object>();
+        attributes.put(AttributeKeys.FILL_COLOR, Color.black);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new DoorFigure(), attributes), "edit.createDoor", myLabels);
         tb.addSeparator();
+
+        attributes = new HashMap<AttributeKey<?>, Object>();
+        attributes.put(AttributeKeys.TEXT_COLOR, Color.black);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new TableFigure(), attributes), "edit.createTable", myLabels);
+
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new ChairFigure(), attributes), "edit.createChair", myLabels);
+
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new BedFigure(), attributes), "edit.createBed", myLabels);
+
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new PlantFigure(), attributes), "edit.createPlant", myLabels);
+
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new BathtubFigure(), attributes), "edit.createBathtub", myLabels);
     }
 
     @Override

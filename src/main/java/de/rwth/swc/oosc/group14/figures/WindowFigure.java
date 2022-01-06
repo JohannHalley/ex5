@@ -8,7 +8,5 @@ import org.jhotdraw.geom.GrowStroke;
 import java.awt.*;
 
 public class WindowFigure extends RectangleFigure {
-    protected void drawFill(Graphics2D g) {
-        g.set
-    }
+
 }
