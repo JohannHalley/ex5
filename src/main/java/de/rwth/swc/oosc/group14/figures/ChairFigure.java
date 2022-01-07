@@ -8,7 +8,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
 
-public class ChairFigure extends TextAreaFigure {
+public class ChairFigure extends FurnitureFigure {
 
     public ChairFigure() {
         this(AppLabels.getLabels().

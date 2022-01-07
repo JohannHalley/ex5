@@ -8,7 +8,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
 
-public class PlantFigure extends TextAreaFigure {
+public class PlantFigure extends FurnitureFigure {
     public PlantFigure() {
         this(AppLabels.getLabels().
                 getString("PlantFigure.defaultText"));

@@ -19,7 +19,7 @@ import java.util.*;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
 
-public class TableFigure extends TextAreaFigure {
+public class TableFigure extends FurnitureFigure {
     public TableFigure() {
         this(AppLabels.getLabels().
                 getString("TableFigure.defaultText"));

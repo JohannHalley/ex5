@@ -96,11 +96,7 @@ public class DrawApplicationModel extends DefaultApplicationModel {
 //        addMyButtonsTo(tb, editor);
 //        tb.setName("myButton");
 //        list.add(tb);
-        tb = new JToolBar();
-        ButtonFactory.addAttributesButtonsTo(tb, editor);
-        tb.setName(labels.getString("window.attributesToolBar.title"));
-        list.add(tb);
-        tb = new JToolBar();
+
         ButtonFactory.addAlignmentButtonsTo(tb, editor);
         tb.setName(labels.getString("window.alignmentToolBar.title"));
         list.add(tb);
@@ -163,42 +159,6 @@ public class DrawApplicationModel extends DefaultApplicationModel {
         addMyButtonsTo(tb, editor,
                 ButtonFactory.createDrawingActions(editor),
                 ButtonFactory.createSelectionActions(editor));
-    }
-
-    public void addDefaultCreationButtonsTo(JToolBar tb, final DrawingEditor editor,
-            Collection<Action> drawingActions, Collection<Action> selectionActions) {
-        ResourceBundleUtil myLabels = AppLabels.getLabels();
-        ResourceBundleUtil labels = DrawLabels.getLabels();
-        HashMap<AttributeKey<?>, Object> attributes;
-        ButtonFactory.addSelectionToolTo(tb, editor, drawingActions, selectionActions);
-        tb.addSeparator();
-
-        AbstractAttributedFigure af;
-        CreationTool ct;
-        ConnectionTool cnt;
-        ConnectionFigure lc;
-
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new RectangleFigure()), "edit.createRectangle", labels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new RoundRectangleFigure()), "edit.createRoundRectangle", labels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new EllipseFigure()), "edit.createEllipse", labels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new DiamondFigure()), "edit.createDiamond", labels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new TriangleFigure()), "edit.createTriangle", labels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new LineFigure()), "edit.createLine", labels);
-        ButtonFactory.addToolTo(tb, editor, ct = new CreationTool(new LineFigure()), "edit.createArrow", labels);
-        af = (AbstractAttributedFigure) ct.getPrototype();
-        af.set(END_DECORATION, new ArrowTip(0.35, 12, 11.3));
-        ButtonFactory.addToolTo(tb, editor, new ConnectionTool(new LineConnectionFigure()), "edit.createLineConnection", labels);
-        ButtonFactory.addToolTo(tb, editor, cnt = new ConnectionTool(new LineConnectionFigure()), "edit.createElbowConnection", labels);
-        lc = cnt.getPrototype();
-        lc.setLiner(new ElbowLiner());
-        ButtonFactory.addToolTo(tb, editor, cnt = new ConnectionTool(new LineConnectionFigure()), "edit.createCurvedConnection", labels);
-        lc = cnt.getPrototype();
-        lc.setLiner(new CurvedLiner());
-        ButtonFactory.addToolTo(tb, editor, new BezierTool(new BezierFigure()), "edit.createScribble", labels);
-        ButtonFactory.addToolTo(tb, editor, new BezierTool(new BezierFigure(true)), "edit.createPolygon", labels);
-        ButtonFactory.addToolTo(tb, editor, new TextCreationTool(new TextFigure()), "edit.createText", labels);
-        ButtonFactory.addToolTo(tb, editor, new TextAreaCreationTool(new TextAreaFigure()), "edit.createTextArea", labels);
-        ButtonFactory.addToolTo(tb, editor, new ImageTool(new ImageFigure()), "edit.createImage", labels);
     }
 
     @Override

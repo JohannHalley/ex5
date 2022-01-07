@@ -5,7 +5,7 @@ import org.jhotdraw.draw.TextAreaFigure;
 
 import static org.jhotdraw.draw.AttributeKeys.TEXT;
 
-public class OwnFigure extends TextAreaFigure {
+public class OwnFigure extends FurnitureFigure {
     public OwnFigure() {
         this(AppLabels.getLabels().
                 getString("createOwn.defaultText"));

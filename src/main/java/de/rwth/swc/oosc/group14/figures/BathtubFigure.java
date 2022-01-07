@@ -8,7 +8,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
 
-public class BathtubFigure extends TextAreaFigure {
+public class BathtubFigure extends FurnitureFigure {
     public BathtubFigure() {
         this(AppLabels.getLabels().
                 getString("BathtubFigure.defaultText"));
