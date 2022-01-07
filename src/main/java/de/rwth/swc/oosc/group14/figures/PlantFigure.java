@@ -8,43 +8,17 @@ import org.jhotdraw.util.ResourceBundleUtil;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
 
-public class PlantFigure extends GraphicalCompositeFigure {
+public class PlantFigure extends TextAreaFigure {
     public PlantFigure() {
-        super(new DiamondFigure());
-
-        setLayouter(new VerticalLayouter());
-
-        RectangleFigure nameCompartmentPF = new RectangleFigure();
-        nameCompartmentPF.set(STROKE_COLOR, null);
-        nameCompartmentPF.setAttributeEnabled(STROKE_COLOR, false);
-        nameCompartmentPF.set(FILL_COLOR, null);
-        nameCompartmentPF.setAttributeEnabled(FILL_COLOR, false);
-        ListFigure nameCompartment = new ListFigure(nameCompartmentPF);
-
-        add(nameCompartment);
-
-//        Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
-//        nameCompartment.set(LAYOUT_INSETS, insets);
-        nameCompartment.setAttributeEnabled(LAYOUT_INSETS, false);
-        TextFigure nameFigure;
-        nameCompartment.add(nameFigure = new TextFigure());
-        nameFigure.set(FONT_BOLD, true);
-        nameFigure.setAttributeEnabled(FONT_BOLD, false);
-
-        setAttributeEnabled(STROKE_DASHES, false);
-
-        ResourceBundleUtil labels =
-                AppLabels.getLabels();
-
-        setName("Plant");
-
+        this(AppLabels.getLabels().
+                getString("PlantFigure.defaultText"));
     }
 
-    public void setName(String newValue) {
-        getNameFigure().setText(newValue);
+    public PlantFigure(String text) {
+        setText(text);
     }
 
-    private TextFigure getNameFigure() {
-        return (TextFigure) ((ListFigure) getChild(0)).getChild(0);
+    public void setText(String newText) {
+        set(TEXT, newText);
     }
 }
