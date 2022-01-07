@@ -4,21 +4,8 @@
 
 package de.rwth.swc.oosc.group14;
 
-import org.jhotdraw.draw.AttributeKeys;
-import org.jhotdraw.draw.BezierFigure;
-import org.jhotdraw.draw.DefaultDrawing;
-import org.jhotdraw.draw.DiamondFigure;
-import org.jhotdraw.draw.EllipseFigure;
-import org.jhotdraw.draw.GroupFigure;
-import org.jhotdraw.draw.ImageFigure;
-import org.jhotdraw.draw.LineConnectionFigure;
-import org.jhotdraw.draw.LineFigure;
-import org.jhotdraw.draw.QuadTreeDrawing;
-import org.jhotdraw.draw.RectangleFigure;
-import org.jhotdraw.draw.RoundRectangleFigure;
-import org.jhotdraw.draw.TextAreaFigure;
-import org.jhotdraw.draw.TextFigure;
-import org.jhotdraw.draw.TriangleFigure;
+import de.rwth.swc.oosc.group14.figures.*;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.connector.ChopBezierConnector;
 import org.jhotdraw.draw.connector.ChopDiamondConnector;
 import org.jhotdraw.draw.connector.ChopEllipseConnector;
@@ -52,7 +39,15 @@ public class DrawFigureFactory extends DefaultDOMFactory {
         { TextAreaFigure.class, "ta" },
         { ImageFigure.class, "image" },
         { GroupFigure.class, "g" },
-        
+        { WallFigure.class, "wall" },
+            { WindowFigure.class, "window" },
+            { DoorFigure.class, "door" },
+            { TableFigure.class, "table" },
+            { ChairFigure.class, "chair" },
+            { BedFigure.class, "bed" },
+            { PlantFigure.class, "plant" },
+            { BathtubFigure.class, "bathtub" },
+            { ListFigure.class, "list" },
         { ArrowTip.class, "arrowTip" },
         { ChopRectangleConnector.class, "rConnector" },
         { ChopEllipseConnector.class, "ellipseConnector" },
@@ -60,6 +55,7 @@ public class DrawFigureFactory extends DefaultDOMFactory {
         { ChopTriangleConnector.class, "triangleConnector" },
         { ChopDiamondConnector.class, "diamondConnector" },
         { ChopBezierConnector.class, "bezierConnector" },
+
         
         { ElbowLiner.class, "elbowLiner" },
         { CurvedLiner.class, "curvedLiner" },

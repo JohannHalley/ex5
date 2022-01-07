@@ -34,9 +34,9 @@ public class TableFigure extends GraphicalCompositeFigure {
 
         add(nameCompartment);
 
-        Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
-        nameCompartment.set(LAYOUT_INSETS, insets);
-
+//        Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
+//        nameCompartment.set(LAYOUT_INSETS, insets);
+        nameCompartment.setAttributeEnabled(LAYOUT_INSETS, false);
         TextFigure nameFigure;
         nameCompartment.add(nameFigure = new TextFigure());
         nameFigure.set(FONT_BOLD, true);

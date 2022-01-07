@@ -35,9 +35,14 @@ public class BedFigure extends GraphicalCompositeFigure {
         add(nameCompartment5);
         add(nameCompartment6);
 
-        Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
-        nameCompartment.set(LAYOUT_INSETS, insets);
-
+//        Insets2D.Double insets = new Insets2D.Double(4, 8, 4, 8);
+//        nameCompartment.set(LAYOUT_INSETS, insets);
+        nameCompartment.setAttributeEnabled(LAYOUT_INSETS, false);
+        nameCompartment2.setAttributeEnabled(LAYOUT_INSETS, false);
+        nameCompartment3.setAttributeEnabled(LAYOUT_INSETS, false);
+        nameCompartment4.setAttributeEnabled(LAYOUT_INSETS, false);
+        nameCompartment5.setAttributeEnabled(LAYOUT_INSETS, false);
+        nameCompartment6.setAttributeEnabled(LAYOUT_INSETS, false);
         TextFigure nameFigure;
         nameCompartment.add(nameFigure = new TextFigure());
         nameFigure.set(FONT_BOLD, true);
