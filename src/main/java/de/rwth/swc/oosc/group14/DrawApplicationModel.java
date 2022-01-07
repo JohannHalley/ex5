@@ -51,6 +51,10 @@ public class DrawApplicationModel extends DefaultApplicationModel {
      */
     private DefaultDrawingEditor sharedEditor;
 
+    //todo for reasonable resize check
+    private int backgroundWidth = 0;
+    private int backgroundHeight = 0;
+
     /** Creates a new instance. */
     public DrawApplicationModel() {
     }
@@ -97,6 +101,12 @@ public class DrawApplicationModel extends DefaultApplicationModel {
 //        tb.setName("myButton");
 //        list.add(tb);
 
+        //TODO toolbar for furniture
+        tb = new JToolBar();
+
+        list.add(tb);
+
+        tb = new JToolBar();
         ButtonFactory.addAlignmentButtonsTo(tb, editor);
         tb.setName(labels.getString("window.alignmentToolBar.title"));
         list.add(tb);
