@@ -1,10 +1,10 @@
 package de.rwth.swc.oosc.group14.figures;
 
 import de.rwth.swc.oosc.group14.AppLabels;
-import org.jhotdraw.draw.TextAreaFigure;
 
 import static org.jhotdraw.draw.AttributeKeys.TEXT;
 
+//TODO not implement
 public class OwnFigure extends FurnitureFigure {
     public OwnFigure() {
         this(AppLabels.getLabels().

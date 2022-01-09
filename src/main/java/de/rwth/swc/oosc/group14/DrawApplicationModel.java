@@ -137,7 +137,7 @@ public class DrawApplicationModel extends DefaultApplicationModel {
         tb.addSeparator();
 
         ButtonFactory.addToolTo(tb, editor, new ImageTool(new ImportSketchFigure()), "edit.importSketch", myLabels);
-        ButtonFactory.addToolTo(tb, editor, new CreationTool(new RectangleFigure()), "edit.createFloor", myLabels);
+        ButtonFactory.addToolTo(tb, editor, new CreationTool(new FloorFigure()), "edit.createFloor", myLabels);
         ButtonFactory.addToolTo(tb, editor, new CreationTool(new WallFigure()), "edit.createWall", myLabels);
 
         attributes = new HashMap<AttributeKey<?>, Object>();
