@@ -8,6 +8,8 @@ import org.jhotdraw.app.Application;
 import org.jhotdraw.app.ApplicationModel;
 import org.jhotdraw.app.DefaultApplicationModel;
 import org.jhotdraw.app.View;
+import org.jhotdraw.app.action.edit.ClearSelectionAction;
+import org.jhotdraw.app.action.file.ExportFileAction;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.ButtonFactory;
 import org.jhotdraw.draw.decoration.ArrowTip;
@@ -25,8 +27,8 @@ import org.jhotdraw.gui.filechooser.ExtensionFileFilter;
 import org.jhotdraw.util.ResourceBundleUtil;
 
 import org.jhotdraw.annotation.Nullable;
-import javax.swing.Action;
-import javax.swing.JToolBar;
+
+import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
@@ -163,6 +165,8 @@ public class DrawApplicationModel extends DefaultApplicationModel {
         tb.addSeparator();
 
         ButtonFactory.addToolTo(tb, editor, new TextAreaCreationTool(new OwnFigure()), "edit.createOwn", myLabels);
+
+        ButtonFactory.addToolTo(tb, editor, new ImageTool(new ImageFigure()), "edit.importOwn", myLabels);
     }
 
     private void addCreationButtonsTo(JToolBar tb, DrawingEditor editor) {
@@ -185,5 +189,10 @@ public class DrawApplicationModel extends DefaultApplicationModel {
         return c;
     }
 
-
+    @Override
+    public ActionMap createActionMap(Application a, @Nullable View v) {
+        ActionMap m = super.createActionMap(a, v);
+        m.put("file.export", new ExportFileAction(a, v));
+        return m;
+    }
 }
