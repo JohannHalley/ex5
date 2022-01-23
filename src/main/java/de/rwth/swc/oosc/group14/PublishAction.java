@@ -4,17 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import de.rwth.swc.oosc.group14.AppLabels;
+import de.rwth.swc.oosc.group14.util.CircuitBreaker;
+import de.rwth.swc.oosc.group14.util.CircuitBreakerConfig;
 import org.jhotdraw.annotation.Nullable;
 import org.jhotdraw.app.Application;
-import org.jhotdraw.app.ApplicationLabels;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.util.ResourceBundleUtil;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,6 +30,7 @@ public class PublishAction extends AbstractViewAction {
     private static final long serialVersionUID = 1L;
     public static final String ID = "file.publish";
     private Component oldFocusOwner;
+    CircuitBreaker breaker = new CircuitBreaker("publishCircuitBreaker", CircuitBreakerConfig.newDefault());
 
 
     public PublishAction(Application app, @Nullable View view) {
@@ -40,10 +41,32 @@ public class PublishAction extends AbstractViewAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //todo click action
+
+        if(breaker.isOpen()){
+            // check if into half-open state
+            if(breaker.isOpen2HalfOpenTimeout()){
+                // set half-open state
+                breaker.openHalf();
+            }else{
+                //TODO show info window
+                JOptionPane.showMessageDialog(null,"Time out!","Error", JOptionPane.WARNING_MESSAGE);	//消息对话框
+            }
+        }else if(breaker.isClosed()){
+            task();
+        }else if(breaker.isHalfOpen()){
+            task();
+            if(true){
+                breaker.close();
+            } else {
+                breaker.open();
+            }
+        }
+
+    }
+
+    private void task() {
         InputStream is = null;
         OutputStream os = null;
-//        BufferedReader br = nu
         HttpURLConnection connection = null;
         try {
 
@@ -73,14 +96,33 @@ public class PublishAction extends AbstractViewAction {
 
             ObjectMapper mapper = new ObjectMapper();
             JavaTimeModule javaTimeModule=new JavaTimeModule();
-            // Hack time module to allow 'Z' at the end of string (i.e. javascript json's)
+
             javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
             mapper.registerModule(javaTimeModule);
             mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-//            System.out.println(mapper.writeValueAsString(image));
+
             os.write(mapper.writeValueAsString(image).getBytes());
             if (connection.getResponseCode() == 200) {
                 System.out.println("success");
+            } else {
+                breaker.open();
+                Thread.sleep(5000);
+                breaker.incrFailCount();
+                if(breaker.isCloseFailThresholdReached()){
+                    breaker.open();
+                }
+
+                if (connection.getResponseCode() == 200) {
+                    System.out.println("success");
+                } else {
+                    Thread.sleep(5000);
+                    if (connection.getResponseCode() == 200) {
+                        System.out.println("success");
+                    } else{
+                        //TODO show info window
+                        JOptionPane.showMessageDialog(null,"Time out!","Error", JOptionPane.WARNING_MESSAGE);	//消息对话框
+                    }
+                }
             }
 
 
@@ -90,6 +132,8 @@ public class PublishAction extends AbstractViewAction {
             e1.printStackTrace();
         } catch (IOException e1) {
             e1.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             //关闭连接
 
@@ -110,113 +154,6 @@ public class PublishAction extends AbstractViewAction {
             //关闭连接
             connection.disconnect();
         }
-
     }
 
-
-//
-//    public void actionPerformed(ActionEvent evt) {
-//        final View view = this.getActiveView();
-//        if (view.isEnabled()) {
-//            ResourceBundleUtil labels = ApplicationLabels.getLabels();
-//            this.oldFocusOwner = SwingUtilities.getWindowAncestor(view.getComponent()).getFocusOwner();
-//            view.setEnabled(false);
-//
-//            try {
-//                URIChooser fileChooser = this.getApplication().getExportChooser(view);
-//                if (this.proposeFileName) {
-//                    URI proposedURI = view.getURI();
-//                    if (proposedURI != null) {
-//                        try {
-//                            URI selectedURI = fileChooser.getSelectedURI();
-//                            File selectedFolder;
-//                            if (selectedURI == null) {
-//                                Preferences prefs = Preferences.userNodeForPackage(this.getApplication().getModel().getClass());
-//
-//                                try {
-//                                    selectedURI = new URI(prefs.get("recentExportFile", (new File(proposedURI)).getParentFile().toURI().toString()));
-//                                    selectedFolder = (new File(selectedURI)).getParentFile();
-//                                } catch (URISyntaxException var11) {
-//                                    selectedFolder = (new File(proposedURI)).getParentFile();
-//                                }
-//                            } else {
-//                                selectedFolder = (new File(selectedURI)).getParentFile();
-//                            }
-//
-//                            File file = new File(selectedFolder, (new File(proposedURI)).getName());
-//                            String name = file.getName();
-//                            int p = name.lastIndexOf(46);
-//                            if (p != -1) {
-//                                name = name.substring(0, p);
-//                                file = new File(selectedFolder, name);
-//                                proposedURI = file.toURI();
-//                            }
-//                        } catch (IllegalArgumentException var12) {
-//                        }
-//                    }
-//
-//                    fileChooser.setSelectedURI(proposedURI);
-//                }
-//
-//                JSheet.showSheet(fileChooser, view.getComponent(), labels.getString("filechooser.export"), new SheetListener() {
-//                    public void optionSelected(SheetEvent evt) {
-//                        if (evt.getOption() == 0) {
-//                            URI uri = evt.getChooser().getSelectedURI();
-//                            if (evt.getChooser() instanceof JFileURIChooser && evt.getFileChooser().getFileFilter() instanceof ExtensionFileFilter) {
-//                                uri = ((ExtensionFileFilter)evt.getFileChooser().getFileFilter()).makeAcceptable(evt.getFileChooser().getSelectedFile()).toURI();
-//                            } else {
-//                                uri = evt.getChooser().getSelectedURI();
-//                            }
-//
-//                            Preferences prefs = Preferences.userNodeForPackage(org.jhotdraw.app.action.file.ExportFileAction.this.getApplication().getModel().getClass());
-//                            prefs.put("recentExportFile", uri.toString());
-//                            if (evt.getChooser() instanceof JFileURIChooser) {
-//                                org.jhotdraw.app.action.file.ExportFileAction.this.exportView(view, uri, evt.getChooser());
-//                            } else {
-//                                org.jhotdraw.app.action.file.ExportFileAction.this.exportView(view, uri, (URIChooser)null);
-//                            }
-//                        } else {
-//                            view.setEnabled(true);
-//                            if (org.jhotdraw.app.action.file.ExportFileAction.this.oldFocusOwner != null) {
-//                                org.jhotdraw.app.action.file.ExportFileAction.this.oldFocusOwner.requestFocus();
-//                            }
-//                        }
-//
-//                    }
-//                });
-//            } catch (Error var13) {
-//                view.setEnabled(true);
-//                throw var13;
-//            } catch (Throwable var14) {
-//                view.setEnabled(true);
-//                var14.printStackTrace();
-//            }
-//        }
-//
-//    }
-//
-//    protected void exportView(final View view, final URI uri, @Nullable final URIChooser chooser) {
-//        view.execute(new BackgroundTask() {
-//            protected void construct() throws IOException {
-//                view.write(uri, chooser);
-//            }
-//
-//            protected void failed(Throwable value) {
-//                System.out.flush();
-//                value.printStackTrace();
-//                JComponent var10000 = view.getComponent();
-//                String var10001 = UIManager.getString("OptionPane.css");
-//                JSheet.showMessageSheet(var10000, "<html>" + var10001 + "<b>Couldn't export to the file \"" + URIUtil.getName(uri) + "\".<p>Reason: " + value, 0);
-//            }
-//
-//            protected void finished() {
-//                view.setEnabled(true);
-//                SwingUtilities.getWindowAncestor(view.getComponent()).toFront();
-//                if (org.jhotdraw.app.action.file.ExportFileAction.this.oldFocusOwner != null) {
-//                    org.jhotdraw.app.action.file.ExportFileAction.this.oldFocusOwner.requestFocus();
-//                }
-//
-//            }
-//        });
-//    }
 }
